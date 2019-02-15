@@ -52,5 +52,6 @@ public class Authentication  {
         subject.logout();
         //此时再打印登陆状态，会显示false
         System.out.println("isAuthenticated:"+subject.isAuthenticated());
+
     }
 }

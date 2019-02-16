@@ -10,19 +10,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * 新的测试类，用于测试shiro认证
+ * shiro的认证和授权测试类
  * @author furao
  * @date 2019/2/15 21:13
  */
-public class Authentication  {
+public class AuthenticationTest  {
 
     //设置全局变量，以供defaultSecurityManager使用。里面存储了一个账户
     SimpleAccountRealm simpleAccountRealm = new SimpleAccountRealm();
 
     @Before
     public void addUser(){
-        //对simpleAccountRealm中添加一个账户
-        simpleAccountRealm.addAccount("zhangsan","123456");
+        //对simpleAccountRealm中添加一个账户(用户名、密码、角色)
+        simpleAccountRealm.addAccount("zhangsan","123456","admin","leader");
+
+
     }
 
     @Test
@@ -44,10 +46,15 @@ public class Authentication  {
         UsernamePasswordToken passwordToken = new UsernamePasswordToken("zhangsan", "123456");
 
         //subject利用token登陆
+        /*登陆认证是通过authenticator进行认证*/
         subject.login(passwordToken);
 
         //此时已经登陆了。打印出来登陆状态
         System.out.println("isAuthenticated:"+subject.isAuthenticated());
+
+        //进行验证角色(无返回值，但是会抛异常AuthorizationException)
+        /*授权是通过authorizer进行*/
+        subject.checkRoles("admin","leader");
 
         //进行退出登录
         subject.logout();

@@ -5,6 +5,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.SimpleAccountRealm;
 import org.apache.shiro.subject.Subject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,7 +27,6 @@ public class Authentication  {
 
     @Test
     public void testAuthentication(){
-
 
         //1. 构建securityManager环境
         DefaultSecurityManager defaultSecurityManager = new DefaultSecurityManager();
@@ -53,6 +53,11 @@ public class Authentication  {
         subject.logout();
         //此时再打印登陆状态，会显示false
         System.out.println("isAuthenticated:"+subject.isAuthenticated());
+
+    }
+
+    @After
+    public void doNothing(){
 
     }
 }

@@ -27,6 +27,7 @@ public class Authentication  {
     @Test
     public void testAuthentication(){
 
+
         //1. 构建securityManager环境
         DefaultSecurityManager defaultSecurityManager = new DefaultSecurityManager();
         //在环境中设置一个simpleAccountRealm

@@ -40,8 +40,6 @@ public class CustomRealmTest {
         //此时判断是否拥有某些权限
         //如果没有某些权限，则报UnauthorizedException
         subject.checkPermissions("user:delete","user:add");
-
-
- 
+        
     }
 }

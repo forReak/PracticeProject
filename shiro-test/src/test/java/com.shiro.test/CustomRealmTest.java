@@ -42,6 +42,6 @@ public class CustomRealmTest {
         subject.checkPermissions("user:delete","user:add");
 
 
-
+ 
     }
 }

@@ -4,8 +4,10 @@ import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.Hash;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,7 +24,8 @@ public class CustomRealm extends AuthorizingRealm {
     private Map<String, HashSet<String>> rolePermissions =  new HashMap<>();
 
     {
-        this.userName.put("zhangsan","123456");
+        //this.userName.put("zhangsan","123456");明文时可以存123456，加密后需要存md5加密加盐后的值
+        this.userName.put("zhangsan","61a310016ddcf3312aa004dc714f976f");
         this.userRoles.put("zhangsan",new HashSet<String>(){{add("admin");add("leader");}});
         this.rolePermissions.put("admin",new HashSet<String>(){{add("user:add");}});
         this.rolePermissions.put("leader",new HashSet<String>(){{add("user:delete");}});
@@ -77,7 +80,10 @@ public class CustomRealm extends AuthorizingRealm {
         //3.返回自定义的验证信息
         //userName：用户输入的用户名  password：从数据库查询到的用户名  super.getName：获取的构造块设置的realm名
         SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(userName,password,super.getName());
-        return simpleAuthenticationInfo;
+
+        //在返回AuthenticationInfo之前，如果加密了而且加盐了，那么需要在这里面设置盐值
+        simpleAuthenticationInfo.setCredentialsSalt(ByteSource.Util.bytes("MARK"));
+      return simpleAuthenticationInfo;
     }
 
     //模拟从数据库中读取数据
@@ -95,5 +101,12 @@ public class CustomRealm extends AuthorizingRealm {
         return permissions;
     }
 
-
+    /**
+     * 通过md5 及加盐计算出zhangsan密码md5之后的数值，放入数据库
+     * @param args
+     */
+    public static void main(String[] args) {
+        Md5Hash md5Hash = new Md5Hash("123456","MARK");
+        System.out.println(md5Hash.toString());
+    }
 }

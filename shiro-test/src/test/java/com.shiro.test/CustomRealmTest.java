@@ -3,6 +3,7 @@ package com.shiro.test;
 import com.furao.shiro.realm.CustomRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.text.IniRealm;
 import org.apache.shiro.subject.Subject;
@@ -18,6 +19,14 @@ public class CustomRealmTest {
     public void testAuthentication(){
 
         CustomRealm customRealm = new CustomRealm();
+        //上面自定义realm创建好之后，需要进行设置自定义realm的加密
+        HashedCredentialsMatcher matcher = new HashedCredentialsMatcher();
+        //设置加密方式
+        matcher.setHashAlgorithmName("md5");
+        //设置加密次数
+        matcher.setHashIterations(1);
+        //向自定义realm中设置加密
+        customRealm.setCredentialsMatcher(matcher);
 
         //1. 构建securityManager环境
         DefaultSecurityManager defaultSecurityManager = new DefaultSecurityManager();

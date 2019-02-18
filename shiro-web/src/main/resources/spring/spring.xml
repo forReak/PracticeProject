@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--shiro首配置项-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="login.html"/>
+        <property name="unauthorizedUrl" value="403.html"/>
+        <!--shiro的过滤器链
+        过滤器链从上往下匹配
+        /login.html = anon ： 所有都可以登陆的页面
+        /loginAction : 登陆的路径请求也不需要控制
+        /* = authc ： 认证后才能登陆的页面-->
+        <property name="filterChainDefinitions">
+            <value>
+                /login.html = anon
+                /loginAction = anon
+                /* = authc
+            </value>
+        </property>
+
+    </bean>
+
+    <!--创建securityManager对象-->
+    <bean class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" id="securityManager" >
+        <!--将自定义realm注入-->
+        <!--defaultSecurityManager.setRealm(customRealm);-->
+        <property name="realm" ref="customRealm"/>
+
+    </bean>
+
+    <bean class="com.furao.realm.CustomRealm" id="customRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>
+
+    <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher" id="credentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="1"/>
+    </bean>
+</beans>

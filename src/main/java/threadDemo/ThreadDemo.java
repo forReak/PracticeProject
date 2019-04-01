@@ -1,7 +1,7 @@
 package threadDemo;
 
 /**
- * 多线程demo
+ * 多线程demo,同步count字段。利用锁当前类的方式进行同步
  */
 public class ThreadDemo {
 
